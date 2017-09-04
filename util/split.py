@@ -9,7 +9,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from util.arma import *
 
 # 定位某一行
 def locate(id: int):
@@ -27,37 +26,29 @@ def diff_points(points):
 
 
 # 返回时间点和该时间点的速度
-def cal_speed(diff, points):
+def cal_speed(diff):
 
     speed_x = np.divide(diff[:, 0], diff[:, 2])
-    speed_y = np.divide(diff[:, 1], diff[:, 2])
-    return filter(diff[:, 2], speed_x, speed_y)
-
-# def cal_speed_ma(diff, points, step):
-#     tt, speed = cal_speed(diff, points)
-#     return moving_average(step, tt, speed)
+    return filter(speed_x)
 
 # 计算时间
 def cal_time(diff):
     return diff[:, 2]
 
 # 删去nan值
-def filter(time, arr, arr2):
+def filter(arr):
     _l = len(arr)
     index = []
 
     for idx in range(_l):
-        if np.isinf(arr[idx]) or np.isinf(arr2[idx]):
+        if np.isinf(arr[idx]):
             index.append(idx) # delete
-        elif np.isnan(arr[idx]) or np.isnan(arr2[idx]):
+        elif np.isnan(arr[idx]):
             arr[idx] = 0
-            arr2[idx] = 0
 
-    time = np.delete(time, index)
     arr = np.delete(arr, index)
-    arr2 = np.delete(arr2, index)
 
-    return time, arr, arr2
+    return arr
 
 def plot(id, tt, yy):
     plt.clf()
